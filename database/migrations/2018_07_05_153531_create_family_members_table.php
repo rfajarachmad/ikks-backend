@@ -20,6 +20,7 @@ class CreateFamilyMembersTable extends Migration
             $table->string('code');
             $table->string('full_name');
             $table->string('nick_name');
+            $table->date('dob');
             $table->string('mobile_phone');
             $table->string('home_phone');
             $table->string('address');
