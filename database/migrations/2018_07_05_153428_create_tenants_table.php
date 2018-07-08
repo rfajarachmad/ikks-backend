@@ -15,7 +15,11 @@ class CreateTenantsTable extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('pic_name');
+            $table->string('contact_name');
+            $table->string('billing_address');
+            $table->string('subscription_plan');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

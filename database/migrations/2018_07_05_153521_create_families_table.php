@@ -17,6 +17,8 @@ class CreateFamiliesTable extends Migration
             $table->increments('id');
             $table->integer('tenant_id');
             $table->string('name');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

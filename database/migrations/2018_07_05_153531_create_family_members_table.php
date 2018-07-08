@@ -16,15 +16,18 @@ class CreateFamilyMembersTable extends Migration
         Schema::create('family_members', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('family_id');
-            $table->integer('user_id');
-            $table->string('code');
+            $table->integer('user_id')->nullable();
+            $table->integer('parent_id')->nullable();
+            $table->string('code')->nullable();
             $table->string('full_name');
-            $table->string('nick_name');
-            $table->date('dob');
-            $table->string('mobile_phone');
-            $table->string('home_phone');
-            $table->string('address');
-            $table->string('photo_url');
+            $table->string('nick_name')->nullable();
+            $table->year('year_of_date')->nullable();
+            $table->string('mobile_phone')->nullable();
+            $table->string('home_phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('photo_url')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
