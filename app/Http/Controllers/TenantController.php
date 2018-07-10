@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use App\Tenant;
@@ -29,6 +31,7 @@ class TenantController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
+
         //Create Tenant
     	$tenant = new Tenant();
     	$tenant->contact_name = $request->first_name." ".$request->last_name;
@@ -46,6 +49,9 @@ class TenantController extends Controller
     	$user->email = $request->email;
     	$user->password = bcrypt($request->password);
     	$user->role = 'FAMILY_OWNER';
+        $user->status = 'PENDING';
+        $user->token = sha1(time());
+        $user->callback_url = $request->callback_url;
         $user->created_by = 1;
         $user->updated_by = 1;
     	$user->save();
@@ -68,6 +74,28 @@ class TenantController extends Controller
         $familyMember->updated_by = $user->id;
         $familyMember->save();
 
-    	return response()->json($user, 201);
+        //Send activation link via email
+        $url = url('/').'/api/tenants/activation?t='.$user->token;
+        $data =  ['first_name' => $user->first_name, 'activation_url' => $url, 'to' => $user->email];
+        Mail::send('emails.send', $data, function ($message) use ($data)
+        {
+            $message->from('admin@ikks.group', 'noreply@ikks.group');
+            $message->to( $data['to'] )->subject('Selamat datang di AsalUsul!');;
+        });
+
+    	return response()->json(['message'=>'We have sent an email to you, please activate the account'], 201);
+    }
+
+    public function activate(Request $request) {
+
+        $user = DB::table('users')->where('token', $request->t)->where('status', 'PENDING')->first();
+        if ($user) {
+            User::where('token', $request->t)->update(array(
+                'status'    =>  'ACTIVE'
+            ));
+            return redirect($user->callback_url);    
+        } else {
+            return response()->json(['message'=>'Invalid activation code'], 400);
+        }
     }
 }
