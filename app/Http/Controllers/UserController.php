@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use App\User; 
 use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB; 
 use Validator;
 
 class UserController extends Controller {
@@ -24,6 +25,18 @@ class UserController extends Controller {
     public function me() {
         $user = Auth::user(); 
         return response()->json(['success' => $user], $this-> successStatus); 
+    }
+
+    public function logout() {
+        $accessToken = Auth::user()->token();
+        DB::table('oauth_refresh_tokens')
+            ->where('access_token_id', $accessToken->id)
+            ->update([
+                'revoked' => true
+            ]);
+
+        $accessToken->revoke();
+        return response()->json(null, 204);
     }
 }
 ?>
