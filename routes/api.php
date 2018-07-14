@@ -11,9 +11,10 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//Secure
 Route::middleware('auth:api')->get('/user', 'UserController@me');
-Route::middleware('auth:api')->get('/logout', 'UserController@logout');
+Route::middleware('auth:api')->post('/logout', 'UserController@logout');
 
+//Public
 Route::post('login', 'UserController@login');
 Route::post('tenants/register', 'TenantController@register');
