@@ -20,7 +20,10 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('password');
-            $table->string('role')->nullable();;
+            $table->string('role')->nullable();
+            $table->string('status');
+            $table->string('callback_url')->nullable();
+            $table->string('token')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->rememberToken();

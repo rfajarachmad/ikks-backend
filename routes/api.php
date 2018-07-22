@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', 'UserController@me');
 Route::middleware('auth:api')->post('/logout', 'UserController@logout');
 
+
 //Public
+Route::post('tenants/register', 'TenantController@register');
+Route::get('tenants/activation', 'TenantController@activate');
 Route::post('login', 'UserController@login');
 Route::post('tenants/register', 'TenantController@register');
