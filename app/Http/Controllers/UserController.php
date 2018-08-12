@@ -24,7 +24,14 @@ class UserController extends Controller {
 
     public function me() {
         $user = Auth::user(); 
-        return response()->json(['success' => $user], $this-> successStatus); 
+
+        $familyMember = DB::table("family_members")->where("user_id", $user->id)->first();
+        $family = DB::table("families")->where("id", $familyMember->family_id)->first();
+        
+        $familyMember->family = $family;
+        $user->family_member = $familyMember;
+
+        return response()->json($user, $this-> successStatus); 
     }
 
     public function logout() {

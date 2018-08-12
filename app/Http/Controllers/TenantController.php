@@ -31,6 +31,11 @@ class TenantController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
+        $userSameEmail = DB::table('users')->where('email', $request->email)->first();
+        if ($userSameEmail) {
+            return response()->json(["message"=> "Email already exist"], 400);
+        }
+
 
         //Create Tenant
     	$tenant = new Tenant();
