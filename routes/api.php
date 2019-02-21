@@ -14,7 +14,9 @@ use Illuminate\Http\Request;
 //Secure
 Route::middleware('auth:api')->get('/user', 'UserController@me');
 Route::middleware('auth:api')->post('/logout', 'UserController@logout');
-
+Route::middleware('auth:api')->get('/families/{id}', 'FamilyController@get');
+Route::middleware('auth:api')->get('/families/{id}/members', 'FamilyController@members');
+Route::middleware('auth:api')->get('/families/{id}/members/{member_id}', 'FamilyController@getMember');
 
 //Public
 Route::post('tenants/register', 'TenantController@register');
